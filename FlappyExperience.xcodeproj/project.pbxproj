@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -88,6 +88,20 @@
 		CC8019AB2C6832FA0029479C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		DB19B76B303CC0BE00108E60 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				SimulatorScreenshot01.png,
+			);
+			target = CC8019962C6832F90029479C /* FlappyExperience */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		DB19B768303CC0A600108E60 /* Screenshots */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (DB19B76B303CC0BE00108E60 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Screenshots; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		CC8019942C6832F90029479C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -149,6 +163,7 @@
 				CC8019992C6832F90029479C /* FlappyExperience */,
 				CC80199A2C6832F90029479C /* Packages */,
 				CC8019982C6832F90029479C /* Products */,
+				DB19B768303CC0A600108E60 /* Screenshots */,
 			);
 			sourceTree = "<group>";
 		};
