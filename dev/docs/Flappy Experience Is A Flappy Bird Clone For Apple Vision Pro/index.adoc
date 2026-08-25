@@ -1,0 +1,28 @@
+// https://www.uploadvr.com/flappy-experience-apple-vision-pro/
+= Flappy Experience Is A Flappy Bird Clone For Apple Vision Pro
+:lang: en
+
+[[main]]
+
+https://www.uploadvr.com/category/vr-experiences/[VR Experiences]
+
+
+https://www.uploadvr.com/writer/henrystockdale/[Henry Stockdale]
+
+27 September 2024
+
+image::images/Flappy-Experience.webp[Flappy Experience Is A Flappy Bird Clone For Apple Vision Pro,width=1920,height=1080]
+
+Flappy Experience is a clone of Flappy Bird with first-person gameplay, and it's free on Apple Vision Pro.
+
+Developed by Tal Kol using RealityKit, Flappy Experience takes direct inspiration from 2013's casual mobile side-scroller, https://en.wikipedia.org/wiki/Flappy_Bird?ref=uploadvr.com[Flappy Bird]. All you do is move your arms up and down like a bird flapping its wings while aiming to avoid green pipes, and this experience features four levels of difficulty. As part of this release, Tal Kol also released the full source code on https://github.com/talkol/flappy-experience?ref=uploadvr.com[Github].
+
+Here's how it looks in action:
+
+video::videos/Flappy-Experience-720p.mp4[]
+
+
+Flappy Experience comes at a time when Flappy Bird has witnessed an https://en.wikipedia.org/wiki/Flappy_Bird_(2024_video_game)?ref=uploadvr.com[unofficial but controversial reboot]. After being delisted in 2014, a new version built on a blockchain platform recently emerged after the trademark was abandoned and acquired by Gametech. It's faced significant criticism for introducing cryptocurrency and https://www.forbes.com/sites/paultassi/2024/09/15/original-flappy-bird-creator-surfaces-to-disown-its-crypto-zombie-resurrection/?ref=uploadvr.com[not involving] the original developer, Doug Nguyen.
+
+Flappy Experience is https://apps.apple.com/us/app/flappy-experience/id6667117044?ref=uploadvr.com[free to download] on Apple Vision Pro.
+

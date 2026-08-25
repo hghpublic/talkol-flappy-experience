@@ -1,0 +1,87 @@
+= Apple Vision Pro
+:toc:
+:sectnums:
+
+== Flappy Experience: A First-Person VR Game
+
+In the Apple Vision Pro game Flappy Experience—developed by Tal Kol using RealityKit—player movement relies on immersive, physical physics-based gestures that transform the classic mobile game into a first-person virtual reality experience. [1] 
+Unlike standard Apple Vision Pro apps that use micro-gestures like a simple pinch, the movement in this specific game mimics actual flight: [2, 3] 
+
+=== The Core Movement Mechanic
+
+
+* Physical Flapping: To gain altitude and fly, you must physically move your arms up and down like a bird flapping its wings. [1] 
+* The "Flap" Command: Moving your arms downwards registers as a "flap," which pushes your first-person camera view upward against virtual gravity.
+* Continuous Momentum: If you stop flapping your arms, gravity takes over, and your perspective will begin to plunge downward toward the obstacles.
+
+=== Forward Progression (The Technical Illusion)
+Because visionOS is primarily tailored for stationary user experiences, moving a player forward through an infinite map presents technical challenges. To simulate forward flight without triggering severe motion sickness or forcing you to physically walk laps around your room: [4, 5] 
+
+* The Stationary Camera Hack: Your actual virtual position in the room remains completely fixed.
+* Moving the World: The game continuously moves the entire 3D scene (the green obstacles and pipes) toward you. This gives the perfect visual illusion that you are flying forward through the sky, while you safely stay in one spot. [5, 6]  
+
+=== Alternative "Flappy" Clones
+It is worth noting that because the original source code for Flappy Experience was released for free on GitHub, other developers have built similar spin-offs on the App Store with variations in movement. For example, some paper-crane style clones allow players to simply pinch their thumb and index finger together to trigger a upward flap instead of waving their whole arms, offering a much more relaxed, less physically exhausting session. [1, 6, 7] 
+Are you trying to play the game and needing tips on how to pass the pipes, or are you a developer looking into the RealityKit source code to see how the gesture tracking was programmed?
+
+[1] [https://www.uploadvr.com](https://www.uploadvr.com/flappy-experience-apple-vision-pro/)
+[2] [https://www.reddit.com](https://www.reddit.com/r/VisionPro/comments/1f393ss/i_published_the_free_flappy_experience_visionos/)
+[3] [https://support.apple.com](https://support.apple.com/en-om/117741)
+[4] [https://games.themindstudios.com](https://games.themindstudios.com/post/apple-vision-pro-game-app-development/)
+[5] [https://discussions.apple.com](https://discussions.apple.com/thread/255735912)
+[6] [https://www.youtube.com](https://www.youtube.com/watch?v=rAy4x_1QWyY&t=40)
+[7] [https://www.reddit.com](https://www.reddit.com/r/VisionPro/comments/1uzbv3d/made_a_little_vision_pro_game_where_you_pinch_to/)
+
+== Player Movement Mechanics in Flappy Experience
+
+The player movement in Flappy Experience is an engineering workaround designed to adapt classic mobile mechanics into spatial computing. Because the source code was released on GitHub, we can look at the precise implementation details of how the developer, Tal Kol, engineered this movement using Apple's ARKit and RealityKit frameworks. [1, 2] 
+The implementation relies on two core programming mechanics: Hand-Joint Velocity Tracking (for vertical motion) and a Procedural Conveyor Belt System (for horizontal progression). [3] 
+
+=== Vertical Movement: Hand-Joint Tracking & Gesture Logic
+Standard visionOS applications rely on built-in micro-gestures (like pinching the thumb and index finger together). However, Flappy Experience requires custom skeletal tracking, which is handled via ARKit's Hand Tracking Provider. [4] 
+
+* Tracking the Anchors: The game initiates an ARKitSession to track both the left and right hand skeletons in real time. It samples specific hand joints—specifically the wrist and palm joints—relative to the user's head position (AnchorEntity(.head)). [5] 
+* Calculating Velocity Vectors: Rather than just tracking where the hands are, the game's code calculates the speed and direction of the hands over consecutive frames (dY / dT).
+* The "Flap Threshold" Trigger: To prevent accidental triggers when the user simply shifts in their chair, the developer coded a specific downward velocity threshold.
+.. When both hands (or a single hand, depending on settings) move rapidly downward past a certain speed threshold, the system registers a "flap."
+.. Upward movements of the arms are ignored by the code to ensure you don't "flap" while raising your arms back up.
+* Applying Impulse Force: When a valid flap is registered, the game injects a localized upward linear velocity vector (a physics impulse) to the player's camera rig object inside the RealityKit scene graph. This mimics the classic game’s tap mechanic by temporarily overriding gravity. [3] 
+
+=== The Physics Engine: RealityKit Gravity
+Once the upward impulse force is applied, reality takes over via the game engine's physics simulation:
+
+* The Gravity Constant: RealityKit applies a constant downward acceleration vector (simulating gravity) to the virtual camera view. [3] 
+* Terminal Velocity: The code caps how fast a player can fall or rise, ensuring smooth transitions rather than jarring, motion-sickness-inducing drops.
+* The Frame Loop: On every frame update (session(_:didUpdate:) or a RealityKit scene update loop), the engine updates the player's altitude by combining the active downward gravity vector with any remaining momentum from the last arm flap.
+
+=== Horizontal Movement: The Infinite Conveyor Belt
+In a traditional video game, the character moves along the X-axis through a static world map. In Flappy Experience, this is entirely inverted to maintain user safety and comfort: [6] 
+
+* Fixed Camera Coordinate: The player's X (left/right) and Z (forward/backward) spatial coordinates are locked at (0, 0). The camera's transformation matrix only changes on the Y-axis (up/down).
+* The Moving World Component: Instead of moving the player forward, a RealityKit system applies a constant negative horizontal velocity to all spawned obstacle entities.
+* Procedural Spawning & Culling:
+** A generator script automatically spawns pairs of green pipe models a set distance ahead of the player's vector coordinate.
+** These pipe meshes are given a translation vector that moves them toward the player at a steady, uniform pace.
+** Once a pipe entity moves past a certain negative Z-threshold (behind the player's field of view), the code automatically triggers a culling function to delete the object from memory, keeping the hardware from lagging. [3] 
+
+=== Summary of the Game Loop Logic
+When mapped out, the programmatic loop running on the Apple Vision Pro looks like this:
+
+----
+[Every Frame Update]
+ ├── 1. Read ARKit Hand Skeletons -> Check Downward Hand Velocity
+ ├── 2. IF Hand Velocity > Threshold -> Apply Upward Physics Impulse
+ ├── 3. Apply Constant Downward Gravity to Camera Y-Axis
+ ├── 4. Move All Pipe Entities toward Player on Z-Axis
+ └── 5. Check Collisions between Camera Bounding Box and Pipe Bounding Boxes
+----
+
+By decoupling vertical physics (handled via custom hand tracking) from horizontal movement (handled by moving the world assets), the game successfully translates a classic 2D mobile mechanic into a highly functional 3D spatial experience. [2] 
+Would you like to explore how the collision detection is configured between the player's view and the pipes, or are you interested in how to set up an ARKit Hand Tracking session in Xcode?
+
+[1] [https://developer.apple.com](https://developer.apple.com/documentation/visionos)
+[2] [https://www.uploadvr.com](https://www.uploadvr.com/flappy-experience-apple-vision-pro/)
+[3] [https://github.com](https://github.com/TheODDYSEY/Flappy-Bird-Unity)
+[4] [https://support.apple.com](https://support.apple.com/en-us/117741)
+[5] [https://developer.apple.com](https://developer.apple.com/documentation/visionos/placing-entities-using-head-and-device-transform)
+[6] [https://developer.apple.com](https://developer.apple.com/documentation/visionos/creating-fully-immersive-experiences)
